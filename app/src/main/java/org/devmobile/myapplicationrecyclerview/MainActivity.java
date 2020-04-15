@@ -1,23 +1,22 @@
 package org.devmobile.myapplicationrecyclerview;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.SQLException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText etNom,etTel;
+    private EditText nom_field,tel_field;
     private Button Add,Del,Reset,Update,Show;
-    private AdherentDataSource dataSrc;
+    private AdherentDataSource adherentdatasource;
     private Bundle extras;
 
 
@@ -25,15 +24,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dataSrc = new AdherentDataSource(this);
+        adherentdatasource = new AdherentDataSource(this);
         try {
-            dataSrc.open();
+            adherentdatasource.open();
         }   catch (Exception e) {
             e.printStackTrace();
         }
 
-        etNom = (EditText) findViewById(R.id.etNom);
-        etTel = (EditText) findViewById(R.id.etTel);
+        nom_field = (EditText) findViewById(R.id.Nom_field);
+        tel_field = (EditText) findViewById(R.id.tel_field);
 
         Add = findViewById(R.id.btAjout);
         Del = findViewById(R.id.btSupp);
@@ -41,49 +40,51 @@ public class MainActivity extends AppCompatActivity {
         Update =findViewById(R.id.Update);
         Show = findViewById(R.id.show);
 
+
+        
         final Intent intent =new Intent(this,MyRecyclView.class);
-        final List<Adherent> lstAdherents = dataSrc.getAllAdherents();
+        final List<Adherent> lstAdherents = adherentdatasource.getAllAdherents();
 
         extras = getIntent().getExtras();
         if (extras != null){
-            etNom.setText(extras.getString("cName"));
-            etTel.setText(extras.getString("cTel"));
+            nom_field.setText(extras.getString("cName"));
+            tel_field.setText(extras.getString("cTel"));
         }
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etNom.getText().length()>0) {
-                        lstAdherents.add(dataSrc.creerAdherent(etNom.getText().toString(), etTel.getText().toString()));
-                        dataSrc.getAllAdherents();
+                if(nom_field.getText().length()>0) {
+                        lstAdherents.add(adherentdatasource.creerAdherent(nom_field.getText().toString(), tel_field.getText().toString()));
+                        adherentdatasource.getAllAdherents();
                         startActivity(intent);
-                        etNom.setText("");
-                        etTel.setText("");
+                        nom_field.setText("");
+                        tel_field.setText("");
                 }
             }
         });
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etNom.getText().length()>0) {
+                if(nom_field.getText().length()>0) {
                     if (extras != null){
-                        dataSrc.updateAdherent(extras.getString("cName"), extras.getString("cTel"),
-                                etNom.getText().toString(), etTel.getText().toString());
-                        dataSrc.getAllAdherents();
+                        adherentdatasource.updateAdherent(extras.getString("cName"), extras.getString("cTel"),
+                                nom_field.getText().toString(), tel_field.getText().toString());
+                        adherentdatasource.getAllAdherents();
                     }
                     startActivity(intent);
-                    etNom.setText("");
-                    etTel.setText("");
+                    nom_field.setText("");
+                    tel_field.setText("");
                 }
             }
         });
         Del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    dataSrc.deleteAdherent(etNom.getText().toString(),etTel.getText().toString());
-                    dataSrc.getAllAdherents();
+                    adherentdatasource.deleteAdherent(nom_field.getText().toString(),tel_field.getText().toString());
+                    adherentdatasource.getAllAdherents();
                     startActivity(intent);
-                    etNom.setText("");
-                    etTel.setText("");
+                    nom_field.setText("");
+                    tel_field.setText("");
             }
         });
         Show.setOnClickListener(new View.OnClickListener() {
@@ -95,11 +96,17 @@ public class MainActivity extends AppCompatActivity {
         Reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    etNom.setText("");
-                    etTel.setText("");
+                    nom_field.setText("");
+                    tel_field.setText("");
             }
         });
+
+
+
     }
+
+
+
 
 }
 

@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 
 import java.util.List;
@@ -23,6 +25,8 @@ public class MyRecyclView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_recycl_view);
+        ImageButton call = findViewById(R.id.callbtn);
+        ImageButton contact = findViewById(R.id.contactBtn);
         dataSrc = new AdherentDataSource(this);
         try {
             dataSrc.open();
@@ -45,5 +49,9 @@ public class MyRecyclView extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
+
     }
 }
